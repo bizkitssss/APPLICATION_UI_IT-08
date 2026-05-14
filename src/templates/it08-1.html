@@ -1,0 +1,55 @@
+<div class="it08-page" ng-controller="CommentFeedController">
+    <div class="it08-header">
+        <h3>IT 08-1</h3>
+    </div>
+
+    <div class="it08-card" ng-if="post">
+        <div class="feed-author">
+            <div class="avatar avatar-post">{{post.username.charAt(0).toUpperCase()}}</div>
+            <div>
+                <div class="author-name">{{post.username}}</div>
+                <time class="post-date">{{ post.postDate | date:'dd MMMM yyyy HH:mm' }}</time>
+            </div>
+        </div>
+
+        <div class="post-image-wrap">
+            <img class="post-image" ng-src="{{post.imageUrl}}" alt="IT 08-1 post image">
+        </div>
+
+        <div class="comment-input-row">
+            <div class="avatar avatar-comment">B</div>
+            <div class="comment-input-panel">
+                <div class="author-name">Blend 285</div>
+                <input type="text"
+                       class="comment-input"
+                       ng-model="comment.text"
+                       ng-keyup="$event.keyCode === 13 && submitComment($event)"
+                       ng-maxlength="maxCommentLength"
+                       maxlength="{{maxCommentLength}}"
+                       placeholder="Write a comment"
+                       ng-disabled="isCommentSaving">
+                <div class="comment-meta">
+                    <span class="comment-error" ng-if="commentError">{{commentError}}</span>
+                    <span class="char-count" ng-class="{'char-count-warning': getRemainingChars() < 0}">
+                        {{getRemainingChars()}} characters left
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="comment-list" aria-live="polite">
+            <div class="comment-row" ng-repeat="comment in post.comments track by comment.id">
+                <div class="avatar avatar-comment">{{comment.username.charAt(0).toUpperCase()}}</div>
+                <div class="comment-body">
+                    <div class="author-name">{{comment.username}}</div>
+                    <p>{{comment.commentText}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="it08-card it08-loading" ng-if="isPostLoading">
+        <span class="spinner"></span>
+        Loading post
+    </div>
+</div>
